@@ -1,0 +1,25 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "index": "nodemon api/index.js",
+    "client": "npm start --prefix blog",
+    "dev": "concurrently \"npm run index\" \"npm run client\""
+  },
+  "author": "nisha <zaibonisha@outlook.com>",
+  "license": "MIT",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.0",
+    "multer": "^1.4.5-lts.1",
+    "path": "^0.12.7"
+  }
+}
