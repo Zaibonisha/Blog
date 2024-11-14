@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const cors = require("cors");  // Import cors
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
 const postRoute = require("./routes/posts");
@@ -11,22 +12,28 @@ const path = require("path");
 
 dotenv.config();
 app.use(express.json());
+
+// Enable CORS
+app.use(cors()); 
+
 app.use("/images", express.static(path.join(__dirname, "/images")));
 
-// Updated MongoDB connection (no deprecated options)
+// MongoDB connection
 mongoose
   .connect(process.env.MONGO_CONNECT)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, "hello.jpg");
-  },
-});
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      const uploadDir = path.join(__dirname, 'images');
+      cb(null, uploadDir);  // Use absolute path
+    },
+    filename: (req, file, cb) => {
+      cb(null, req.body.name);  // Use req.body.name for the filename
+    },
+  });
+  
 
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
